@@ -24,6 +24,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var txtCorreo:EditText
     private lateinit var txtPassword:EditText
     private lateinit var btnLogin:Button
+    private lateinit var btnRegistro:Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +42,7 @@ class LoginActivity : AppCompatActivity() {
         txtCorreo = findViewById(R.id.txtEmailLogin)
         txtPassword=findViewById(R.id.txtPassLogin)
         btnLogin=findViewById(R.id.btn_login)
+        btnRegistro=findViewById(R.id.btn_register)
     }
     private fun inicializarEventos(){
         btnLogin.setOnClickListener {
@@ -48,6 +50,10 @@ class LoginActivity : AppCompatActivity() {
                 //enviar a validar el usuario y contraseña en la api
                 loginApi()
             }
+        }
+        btnRegistro.setOnClickListener {
+            println("ir a registro")
+            goToRegister()
         }
         //otro boton para al registro usuario
         
@@ -111,6 +117,11 @@ class LoginActivity : AppCompatActivity() {
     private fun irHome(){
         val intentHome = Intent(this,MainActivity::class.java)
         startActivity(intentHome)
+        finish()
+    }
+    private fun goToRegister(){
+        val intentRegister = Intent(this,RegistroUsuarioActivity::class.java)
+        startActivity(intentRegister)
         finish()
     }
 
