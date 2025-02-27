@@ -9,16 +9,17 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class RegistroUsuarioActivity : AppCompatActivity() {
-    private lateinit var txtNombre: EditText
-    private lateinit var txtCorreo: EditText
-    private lateinit var txtPassword: EditText
 
-    private lateinit var btnRegistro: Button
-    private lateinit var btnRegresarLogin: Button
+
+    private lateinit var textName: EditText
+    private lateinit var textMail: EditText
+    private lateinit var txtPassword: EditText
+    private lateinit var buttonRegister: Button
+    private lateinit var buttonGoLogin: Button
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_registro_usuario)
 
     }
