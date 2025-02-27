@@ -55,7 +55,6 @@ class LoginActivity : AppCompatActivity() {
             println("ir a registro")
             goToRegister()
         }
-        //otro boton para al registro usuario
         
     }
     private fun validar():Boolean{

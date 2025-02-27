@@ -4,18 +4,20 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+
 import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonParser
+import com.miprimersistemaweb.appisicatalogo.beans.Usuario
+import com.miprimersistemaweb.appisicatalogo.repository.UsuarioRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
-import com.google.gson.GsonBuilder
+
 
 class RegistroUsuarioActivity : AppCompatActivity() {
 
@@ -35,6 +37,7 @@ class RegistroUsuarioActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         inicializarComponentes()
+        initializeEvents()
 
     }
 
@@ -46,102 +49,53 @@ class RegistroUsuarioActivity : AppCompatActivity() {
         buttonRegister = findViewById(R.id.btnRegistrarUsuario)
         buttonGoLogin = findViewById(R.id.btnIrALogin)
     }
-/**
-    private fun inicializarEventos() {
+
+    private fun initializeEvents(){
         buttonRegister.setOnClickListener {
-            if (validar()) {
-                registroUsuarioApi()
+            if (validate()) {
+                //Enviar correo, nombre y pasword a la API
+                /**
+                registerAPI()
+                 */
+
             }
         }
-        
-        buttonGoLogin.setOnClickListener {
-            irLogin()
-        }
+
     }
 
-    private fun validar(): Boolean {
+    private fun validate(): Boolean {
         var valido = true
-        
+
         if (textName.text.toString().isBlank()) {
             valido = false
             textName.error = "Debe ingresar su nombre"
         }
-        
+
         if (textMail.text.toString().isBlank()) {
             valido = false
             textMail.error = "Debe ingresar su correo"
         }
-        
+
         if (txtPassword.text.toString().isBlank()) {
             valido = false
             txtPassword.error = "Debe ingresar su contraseña"
         }
-        
+
         if (txtConfirmPassword.text.toString().isBlank()) {
             valido = false
             txtConfirmPassword.error = "Debe confirmar su contraseña"
         }
-        
+
         if (txtPassword.text.toString() != txtConfirmPassword.text.toString()) {
-            valido = false
             txtConfirmPassword.error = "Las contraseñas no coinciden"
         }
 
-        if (!valido) {
-            Toast.makeText(this, "Error en los datos por favor verificar", Toast.LENGTH_LONG).show()
+        if(!valido){
+            Toast.makeText(this,"Error en los datos por favor verificar",Toast.LENGTH_LONG).show()
         }
 
         return valido
+
     }
 
-    private fun registroUsuarioApi() {
-        val usuarioRepository = UsuarioRepository()
-        val usuario = Usuario(
-            0,
-            textName.text.toString(),
-            textMail.text.toString(),
-            txtPassword.text.toString()
-        )
-        
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val respuesta = usuarioRepository.registro(usuario)
-                withContext(Dispatchers.Main) {
-                    if (respuesta.isSuccessful) {
-                        val gson = GsonBuilder().setPrettyPrinting().create()
-                        val prettyJson = gson.toJson(JsonParser.parseString(respuesta.body()?.string()))
-                        val jsonObjeto = JSONObject(prettyJson)
-                        
-                        if (jsonObjeto.has("error")) {
-                            mostrarMensaje(jsonObjeto.getString("error"))
-                        } else {
-                            mostrarMensaje("Usuario registrado exitosamente")
-                            irLogin()
-                        }
-                        Log.i("Registro", prettyJson)
-                    } else {
-                        val gson = GsonBuilder().setPrettyPrinting().create()
-                        val prettyJson = gson.toJson(JsonParser.parseString(respuesta.errorBody()?.string()))
-                        val jsonObjeto = JSONObject(prettyJson)
-                        val mensaje = jsonObjeto.getString("message")
-                        mostrarMensaje(mensaje)
-                        Log.i("respuesta error json", prettyJson)
-                    }
-                }
-            } catch (error: Exception) {
-                Log.e("Error Registro", error.message.toString())
-            }
-        }
-    }
-
-    private fun mostrarMensaje(msj: String) {
-        Toast.makeText(this, msj, Toast.LENGTH_LONG).show()
-    }
-
-    private fun irLogin() {
-        val intentLogin = Intent(this, LoginActivity::class.java)
-        startActivity(intentLogin)
-        finish()
-    }
-    **/
 }
