@@ -93,8 +93,22 @@
             style="@android:style/Widget"
             android:layout_marginEnd="24dp"
             android:layout_marginStart="24dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="16dp"
             android:id="@+id/btn_login"
             />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Registrar"
+            android:background="@drawable/backgroundbotonlogin"
+            android:textColor="@color/black"
+            android:textSize="21sp"
+            style="@android:style/Widget"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginBottom="40dp"
+            android:id="@+id/btn_register"
+            />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
