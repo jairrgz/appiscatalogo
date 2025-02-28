@@ -43,11 +43,13 @@ class UsuarioRepository {
         // que es la interfaz donde se definen las solicitudes HTTP.
 
         val bodyJson = JSONObject()
-        //nombre
+
+        bodyJson.put("name",usuario.name)
         bodyJson.put("email",usuario.email)
         bodyJson.put("password",usuario.password)
         val bodyjsonstring = bodyJson.toString()
         val requestBody:RequestBody = bodyjsonstring.toRequestBody("application/json".toMediaTypeOrNull())
-        return service.login(requestBody)
+        return service.registroUsuario(requestBody)
+
     }
 }

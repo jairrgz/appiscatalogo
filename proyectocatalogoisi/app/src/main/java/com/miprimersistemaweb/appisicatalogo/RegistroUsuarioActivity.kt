@@ -54,12 +54,15 @@ class RegistroUsuarioActivity : AppCompatActivity() {
         buttonRegister.setOnClickListener {
             if (validate()) {
                 //Enviar correo, nombre y pasword a la API
-                /**
-                registerAPI()
-                 */
-
+                println("Enviar correo, nombre y pasword a la API")
+                registerUserAPI()
             }
         }
+        buttonGoLogin.setOnClickListener {
+            println("ir a login")
+            goToLogin()
+        }
+
 
     }
 
@@ -93,9 +96,62 @@ class RegistroUsuarioActivity : AppCompatActivity() {
         if(!valido){
             Toast.makeText(this,"Error en los datos por favor verificar",Toast.LENGTH_LONG).show()
         }
-
+        print ("The resul is $valido")
         return valido
 
     }
+
+    private fun registerUserAPI(){
+        val usuarioRepository = UsuarioRepository()
+        val user = Usuario(0,textName.text.toString(),textMail.text.toString(),txtPassword.text.toString())
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = usuarioRepository.registro(user)
+                withContext(Dispatchers.Main){
+                    if (response.isSuccessful){
+                        println("La respuesta es exitosa")
+                        val responseBody = response.body()?.string()
+                        if (responseBody != null) {
+                            val jsonObjeto = JSONObject(responseBody)
+                            val data = jsonObjeto.optJSONObject("data")
+
+                            if(data?.has("Error") == true){
+                                showErrorMessage(data.getString("Error"))
+                            }else {
+                                Toast.makeText(this@RegistroUsuarioActivity,
+                                    "Usuario registrado exitosamente, ir al Login",
+                                    Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }else{
+                        // Manejo mejorado del error 400 o 500
+                        val errorBody = response.errorBody()?.string()
+                        if (errorBody != null) {
+                            val errorJson = JSONObject(errorBody)
+                            val mensaje = errorJson.optString("message", "Error desconocido")
+                            showErrorMessage(mensaje)
+                        }
+                    }
+                }
+            }catch (error:Exception){
+                withContext(Dispatchers.Main) {
+                    showErrorMessage("Error de conexión: ${error.message}")
+                }
+                Log.e("Error Registro", error.message.toString())
+            }
+        }
+    }
+
+    private fun showErrorMessage(msj:String){
+        Toast.makeText(this,msj,Toast.LENGTH_LONG).show()
+    }
+
+    private fun goToLogin() {
+        val intentLogin = Intent(this, LoginActivity::class.java)
+        startActivity(intentLogin)
+        finish()
+    }
+
 
 }
